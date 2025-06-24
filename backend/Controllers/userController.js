@@ -22,11 +22,24 @@ const createUser = async(req,res)=>{
             username:username,
         })
         const saveUser = await newUser.save();
-
+        console.log(saveUser)
     }catch(err){
         console.log(err)
     }
 }
 
 
-module.exports = {createUser}
+
+const getProfile = async (req, res) => {
+    connectDB();
+    console.log(req.user.id);
+    try {
+        const user = await User.findById(req.user.id).select("-password");
+        res.json(user);
+    } catch (err) {
+        res.status(500).send("Server Error");
+    }
+}
+
+
+module.exports = {createUser,getProfile}

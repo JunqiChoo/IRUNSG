@@ -6,11 +6,11 @@
         <div class="card text-center">
           <div class="card-header fw-bold">REGISTER HERE</div>
           <div class="card-body">
-            <!-- Prevent form submission and call Login() -->
+            <!-- Wrap in a form and prevent default submit -->
             <form @submit.prevent="signUp">
-                 <div class="form-group mb-3">
+              <div class="form-group mb-3">
                 <input
-                  type="username"
+                  type="text"
                   class="form-control"
                   id="username"
                   placeholder="Enter username"
@@ -28,9 +28,10 @@
                   v-model="User.email"
                 />
               </div>
-               <div class="form-group mb-3">
+
+              <div class="form-group mb-3">
                 <input
-                  type="postalCode"
+                  type="text"
                   class="form-control"
                   placeholder="Postal code"
                   v-model="User.postalCode"
@@ -52,6 +53,9 @@
                 <button type="submit" class="btn btn-success" style="width: 40%;">
                   CREATE
                 </button>
+                <button type="button" @click="testing" class="btn btn-secondary">
+                  To Login
+                </button>
               </div>
             </form>
           </div>
@@ -62,27 +66,36 @@
   </div>
 </template>
 
-
-
 <script setup>
-  import { ref } from 'vue'
-  import axios from "axios"
-  const UrlLink = "http://localhost:3000/api/register"
+import { ref } from 'vue'
+import axios from 'axios'
+import { useToast } from 'vue-toastification'
+import { useRouter } from 'vue-router'
 
- const User = ref({
-        email:'',
-        password:'',
-        postalCode:'',
-        username:'',
-    })
+const toast = useToast()
+const router = useRouter()
+const UrlLink = "http://localhost:3000/api/register"
 
-const signUp = async()=>{
-        console.log(User.value)
-        try{
-            const tempData = await axios.post(UrlLink,User.value)
-            console.log("successfully appoended in")
-        }catch(err){
-            console.log(err)
-        }
-    }
+const User = ref({
+  email: '',
+  password: '',
+  postalCode: '',
+  username: '',
+})
+
+const signUp = async () => {
+  console.log(User.value)
+  try {
+    const tempData = await axios.post(UrlLink, { ...User.value })
+    router.push('/login')
+  } catch (err) {
+    console.log(err)
+    toast.error("Unable to register to IRUNSG :(")
+  }
+}
+
+const testing = async () => {
+  console.log("Trying to navigate to login manually")
+  router.push("/login")
+}
 </script>

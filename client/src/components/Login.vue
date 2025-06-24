@@ -32,7 +32,7 @@
 
               <!-- Button Row Centered -->
               <div class="d-flex justify-content-center gap-3">
-                <button type="button" class="btn btn-secondary" style="width: 40%;">
+                <button @click="createAccountClick" class="btn btn-secondary" style="width: 40%;">
                   Create Account?
                 </button>
                 <button type="submit" class="btn btn-success" style="width: 40%;">
@@ -61,6 +61,29 @@
     })
 
 
+
+
+
 const loginUser = async () => {
-}
+  try {
+    const res = await axios.post('http://localhost:3000/api/login', {
+      email: User.value.email,
+      password: User.value.password
+    });
+
+    localStorage.setItem('token', res.data.token);
+    toast.success('Login successful!');
+    router.push('/Home'); // or whatever route you use
+  } catch (err) {
+    toast.error('Login failed.');
+    console.error(err);
+    router.push('/login')
+    toast.error("Username or password inavlid, please try again.....")
+  }
+};
+
+const createAccountClick = async()=>{
+  router.push("/register")
+};
+
 </script>
