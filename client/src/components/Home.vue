@@ -1,7 +1,60 @@
 <template>
   <div>
-    <h1 v-if="user">Welcome back, {{ user.username }}</h1>
+    <h3 v-if="user" class="text-center">Welcome back, {{ user.username }}</h3>
     <p v-else>Loading user...</p>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-6">
+          <div class="pb-2">
+            <div class="card">
+              <div class="card-body">
+                <h4 v-if="user">POINTS: {{ user.points }}</h4>
+                <p v-else>Loading points...</p>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="card min-vh-100">
+            <div class="card-body">
+              <p>barchart here~</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="card min-vh-100">
+            <div class="card-body">
+              <h4>EVENTS AVAILABLE!</h4>
+              <br />
+
+              <div v-if="events && events.length > 0">
+                <table class="table">
+                  <thead class="table-dark">
+                    <tr>
+                      <th scope="col" style="width: 10%;">No.</th>
+                      <th scope="col" style="width: 80%;">Event</th>
+                      <th scope="col" style="width: 10%;"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(event, index) in events" :key="event._id">
+                      <th scope="row">{{ index + 1 }}</th>
+                      <td>{{ event.eventName }}</td>
+                      <td>
+                        <button class="btn btn-success">View</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p v-else>Sorry, no events available.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -14,7 +67,9 @@ import { useRouter } from 'vue-router'
 const toast = useToast()
 const router = useRouter()
 
-const user = ref() // Start with null, not {}
+const user = ref(null)
+const events = ref([])
+const ChartData = ref([])
 
 const getProfile = async () => {
   try {
@@ -23,18 +78,34 @@ const getProfile = async () => {
         'x-auth-token': localStorage.getItem('token')
       }
     })
-    console.log(".....................")
     user.value = res.data
     console.log("Logged-in user:", res.data)
   } catch (err) {
     console.error(err)
     toast.error('Failed to load profile')
-    router.push('/login') // Optional redirect
+    router.push('/login')
   }
 }
 
-// ✅ Run when component mounts
+const getAllEvents = async () => {
+  try {
+    const res = await axios.get("http://localhost:3000/api/getAllEvents")
+    events.value = res.data
+  } catch (err) {
+    console.log(err)
+    toast.error('Failed to load events')
+  }
+}
+
+
+
+const getChartData = async()=>{
+ 
+}
+
 onMounted(() => {
   getProfile()
+  getAllEvents()
+  getChartData()
 })
 </script>
