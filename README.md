@@ -1,8 +1,15 @@
 # IRUNSG 🏃
 
+progress - currently 30% done
+
 **IRUNSG** is a full-stack web application built with **Vue.js**, **Express**, and **MongoDB**, designed to bring runners together to discover, organize, and join running events. The platform fosters **community, cohesion, and love for the sport** while offering a reward system that encourages participation.
 
 ---
+## ScreenShots
+
+![Register screenshot](./IRUNSG_Register.png)
+![Login screenshot](./IRUNSG_Login.png)
+![Home screenshot](./IRUNSG_Home.png)
 
 ## Features
 
@@ -12,7 +19,7 @@
 - **Join Events & Connect with Other Runners**  
   Participate in events, track attendance, and bond with fellow athletes.
 
-- 📅 **Organize Your Own Runs**  
+- **Organize Your Own Runs**  
   Create public running events with details like region, distance, and type.
 
 - **Earn Points by Participating**  
@@ -33,6 +40,12 @@
 | Styling   | Bootstrap 5, SCSS |
 
 ---
+
+## Security
+
+- Passwords are hashed using `bcrypt` before being stored in MongoDB.
+- Authentication is managed using `JWT` (JSON Web Tokens), issued upon login.
+- Secure endpoints require valid tokens in the `x-auth-token` header.
 
 ## Getting Started
 
