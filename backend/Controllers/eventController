@@ -37,10 +37,47 @@ const getChartData = async (req, res) => {
   }
 };
 
+const createEvent = async (req, res) => {
+  await connectDB();
+  try {
+    const {
+      eventName,
+      postal,
+      runtype,
+      distance,
+      duration,
+      UserID,
+      EventStatus,
+      date,
+      region,
+      points // ✅ must come from frontend or calculated
+    } = req.body;
+
+    const newEvent = new Event({
+      eventName,
+      postal,
+      runtype,
+      distance,
+      duration,
+      UserID,
+      EventStatus,
+      date: new Date(date),
+      region,
+      points
+    });
+
+    const result = await newEvent.save();
+    console.log('Event created:', result);
+
+    res.status(201).json({ message: 'Event created successfully', event: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to create event' });
+  }
+};
 
 
 
 
 
-
-module.exports = {getAllEvents,getChartData}
+module.exports = {getAllEvents,getChartData,createEvent}

@@ -15,7 +15,7 @@ const eventSchema = new Schema({
     type: String,
     required: true
   },
-  Duration: {
+  duration: {
     type: Number,
     required: true
   },
@@ -38,6 +38,10 @@ const eventSchema = new Schema({
   },
   region: {
     type: String,
+    required: true
+  },
+  date: {
+    type: Date,
     required: true
   }
 });
