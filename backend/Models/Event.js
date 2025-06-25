@@ -35,6 +35,10 @@ const eventSchema = new Schema({
   points: {
     type: Number,
     required: true
+  },
+  region: {
+    type: String,
+    required: true
   }
 });
 

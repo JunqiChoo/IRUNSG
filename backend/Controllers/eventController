@@ -8,24 +8,39 @@ const getAllEvents = async(req,res)=>{
     await connectDB();
     try{
         const events = await Event.find();
-        console.log(events)
+       
         res.json(events)
-
+       
     }catch(err){
         console.log(err)
     }
 }
-const getChartData = async (req,res) => {
-     await connectDB();
-    try{
-        const events = await Event.find();
-        console.log(events)
-        res.json(events)
 
-    }catch(err){
-        console.log(err)
-    }
-}
+
+const getChartData = async (req, res) => {
+  await connectDB();
+  try {
+    const events = await Event.find();
+    const regionCount = {};
+
+    events.forEach(event => {
+      if (event.region) {
+        regionCount[event.region] = (regionCount[event.region] || 0) + 1;
+      }
+    });
+
+    console.log("Region counts:", regionCount); 
+    res.json(regionCount);  // ✅ Send the full object
+  } catch (err) {
+    console.error("Error in getChartData:", err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+
+
 
 
 module.exports = {getAllEvents,getChartData}

@@ -17,7 +17,7 @@
           <br />
           <div class="card min-vh-100">
             <div class="card-body">
-              <p>barchart here~</p>
+            <BarChart/>
             </div>
           </div>
         </div>
@@ -63,13 +63,14 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
+import BarChart from "./BarChart.vue"
 
 const toast = useToast()
 const router = useRouter()
 
 const user = ref(null)
 const events = ref([])
-const ChartData = ref([])
+const ChartCount = ref(null) 
 
 const getProfile = async () => {
   try {
@@ -89,7 +90,7 @@ const getProfile = async () => {
 
 const getAllEvents = async () => {
   try {
-    const res = await axios.get("http://localhost:3000/api/getAllEvents")
+    let res = await axios.get("http://localhost:3000/api/getAllEvents")
     events.value = res.data
   } catch (err) {
     console.log(err)
@@ -99,13 +100,27 @@ const getAllEvents = async () => {
 
 
 
-const getChartData = async()=>{
- 
+const getChartData = async () => {
+  try {
+    const res = await axios.get("http://localhost:3000/api/getChartData")
+    ChartCount.value = res.data.count
+    console.log("Event count:", ChartCount.value)
+    console.log("Raw response:", res)
+    console.log("Raw response data:", res.data)
+    console.log("Event count:", res.data.count)
+
+  } catch (err) {
+    console.log(err)
+    toast.error('Failed to load chart data')
+  }
 }
 
+
+
 onMounted(() => {
+  getChartData()
   getProfile()
   getAllEvents()
-  getChartData()
+  
 })
 </script>
