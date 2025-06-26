@@ -9,6 +9,7 @@ const auth = require("../middleware/authMiddleware");
 const {getAllEvents} = require("../Controllers/eventController")
 const {getChartData} = require("../Controllers/eventController");
 const { createEvent } = require("../Controllers/eventController");
+const {getEvent} = require("../Controllers/eventController")
 //getting all the task
 
 //for creating user
@@ -22,6 +23,7 @@ router.route("/getProfile").get(auth,getProfile)
 router.route("/getAllEvents").get(getAllEvents);
 router.route("/getChartData").get(getChartData);
 router.route("/createEvent").post(createEvent);
+router.route("/getEvent/:id").get(getEvent);
 
 
 

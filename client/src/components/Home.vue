@@ -42,7 +42,7 @@
                       <th scope="row">{{ index + 1 }}</th>
                       <td>{{ event.eventName }}</td>
                       <td>
-                        <button class="btn btn-success">View</button>
+                        <button @click="viewEvent(event._id)" class="btn btn-success">View</button>
                       </td>
                     </tr>
                   </tbody>
@@ -114,6 +114,17 @@ const getChartData = async () => {
     toast.error('Failed to load chart data')
   }
 }
+
+
+const viewEvent = async(id)=>{
+  try{
+    router.push("/viewEvent/"+id)
+  }catch(err){
+    console.log("an error occured when transporting you to viewevents page")
+  }
+  
+}
+
 
 
 
