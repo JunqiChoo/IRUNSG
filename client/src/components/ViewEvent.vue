@@ -192,8 +192,15 @@ const joinEvent = async(uid,id)=>{
 };
 
 
-const withdrawEvent = async()=>{
-
+const withdrawEvent = async(uid,id)=>{
+    try{
+        const result = await axios.delete(`http://localhost:3000/api/withdrawEvent/${uid}/${id}`);
+        JoinBool.value = false;
+        console.log(result)
+        await getAllParticipants(); 
+    }catch(err){
+        console.log(err)
+    }
 }
 const getAllParticipants = async()=>{
     try{

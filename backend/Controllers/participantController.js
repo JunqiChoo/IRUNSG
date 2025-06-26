@@ -2,7 +2,17 @@ const mongoose = require('mongoose');
 const Participant = require("../Models/Participant"); // Adjust the path as needed
 const connectDB = require('../Database/MongoDB');
 
-
+const withdrawEvent = async(req,res)=>{
+    const eventID = req.params.eid
+    const UserID =  req.params.id
+    await connectDB();
+    try{
+        const result =await Participant.deleteOne({  eventID:eventID,UserID:UserID})
+        res.json(result)
+    }catch(err){
+        res.json(err)
+    }
+}
 const joinEvent = async(req,res)=>{
     await connectDB();
     const eventID = req.params.eid
@@ -50,4 +60,4 @@ const checkParticipatedUser = async(req,res)=>{
      }
 }
 
-module.exports = {joinEvent,getAllParticipants,checkParticipatedUser}
+module.exports = {joinEvent,getAllParticipants,checkParticipatedUser,withdrawEvent}

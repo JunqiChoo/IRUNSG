@@ -13,7 +13,7 @@ const { createEvent } = require("../Controllers/eventController");
 const {getEvent} = require("../Controllers/eventController")
 const {joinEvent} = require("../Controllers/participantController")
 const {getAllParticipants} = require("../Controllers/participantController")
-const {checkParticipatedUser} = require("../Controllers/participantController")
+const {checkParticipatedUser,withdrawEvent} = require("../Controllers/participantController")
 
 
 //getting all the task
@@ -34,6 +34,7 @@ router.route("/getEvent/:id").get(getEvent);
 
 //for participants route
 router.route("/joinEvent/:id/:eid").post(joinEvent)
+router.route("/withdrawEvent/:id/:eid").delete(withdrawEvent)
 router.route("/getAllParticipants/:eid").get(getAllParticipants)
 router.route("/checkParticipatedUser/:id/:eid").get(checkParticipatedUser)
 
