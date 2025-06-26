@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 v-if="user" class="text-center">Welcome back, {{ user.username }}</h3>
+    <h3 v-if="user" class="text-center m-4 fst-italic">Welcome back, {{ user.username }}</h3>
     <p v-else>Loading user...</p>
 
     <div class="container">

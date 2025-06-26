@@ -227,9 +227,6 @@ const checkJoined = async()=>{
 
     }
 }
-
-
-
 onMounted(async () => {
     await getEvent();
      await getAllParticipants();

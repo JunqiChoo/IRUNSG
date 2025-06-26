@@ -34,26 +34,29 @@
               <div class="row mb-4">
                 <div class="col">
                   <div class="input-group">
-                    <input v-model.number="event.distance" type="number" class="form-control" min="1" max="100" step="1" />
+                    <input v-model.number="event.distance" type="number" class="form-control" min="1" max="100"
+                      step="1" />
                     <span class="input-group-text">km</span>
                   </div>
                 </div>
                 <div class="col">
                   <div class="input-group">
-                    <input v-model.number="event.duration" type="number" class="form-control" min="15" max="200" step="15" />
+                    <input v-model.number="event.duration" type="number" class="form-control" min="15" max="200"
+                      step="15" />
                     <span class="input-group-text">Minutes</span>
                   </div>
                 </div>
                 <div class="col">
                   <div class="input-group">
-                    <input v-model.number="event.points" type="number" class="form-control" min="10" max="200" step="10" />
+                    <input v-model.number="event.points" type="number" class="form-control" min="10" max="200"
+                      step="10" />
                     <span class="input-group-text">points</span>
                   </div>
                 </div>
               </div>
 
               <div class="form-group mb-4">
-               <Datepicker v-model="event.date" class="form-control" />
+                <Datepicker v-model="event.date" class="form-control" />
               </div>
 
               <div class="form-group mb-4">
@@ -67,10 +70,23 @@
                 </select>
               </div>
 
-              <div class="d-flex justify-content-center gap-3">
-                <button type="submit" class="btn btn-primary" style="width: 40%;">
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <button @click="btnback" class="btn btn-secondary w-100">Back</button>
+                  </div>
+                  <div class="col">
+                    <button type="submit" class="btn btn-primary w-100" style="width: 40%;">
                   CREATE EVENT
                 </button>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-center gap-3">
+                
+
               </div>
             </form>
           </div>
@@ -107,6 +123,15 @@ const event = ref({
   region: '',
   points:10
 })
+
+
+const btnback = async () => {
+  try {
+    await router.push("/home")
+  } catch (err) {
+    console.log("Error going back home:", err)
+  }
+}
 
 const getProfile = async () => {
   try {

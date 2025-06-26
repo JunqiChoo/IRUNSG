@@ -13,7 +13,7 @@
           <a class="nav-link" href="#">View Events</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="#">Create Event</a>
+          <a class="nav-link" @click="btnClickAddEvent" >Create Event</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Rewards</a>
@@ -28,11 +28,16 @@
 
 
 
-<script>
-
+<script setup>
 import { useRouter } from 'vue-router'
-const router = useRouter();
-export default{
-    name: 'Header'
+
+defineOptions({
+  name: 'Header'
+})
+
+const router = useRouter()
+
+const btnClickAddEvent = () => {
+  router.push('/addEvent')
 }
 </script>
