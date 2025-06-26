@@ -4,14 +4,14 @@
             <div class="col">
                 <div class="card min-vh-100">
                     <h4 class="card-header text-center">
-                          Event Status:
-                            <span :class="event.EventStatus ? 'text-danger' : 'text-success'">
-                                {{ event.EventStatus ? 'Completed' : 'Ongoing' }}
-                            </span>
+                        Event Status:
+                        <span :class="event.EventStatus ? 'text-danger' : 'text-success'">
+                            {{ event.EventStatus ? 'Completed' : 'Ongoing' }}
+                        </span>
                     </h4>
                     <div class="card-body">
                         <h3 class="card-title text-center">{{ event.eventName }}</h3>
-                       
+
                         <div class="card mb-3">
                             <div class="card-body">
                                 <label>Run type: {{ event.runtype }}</label>
@@ -61,7 +61,7 @@
                                     <button @click="btnback" class="btn btn-primary w-100">Back</button>
                                 </div>
                                 <div class="col">
-                                    <button class="btn btn-success w-100">Join</button>
+                                    <button @click="joinEvent(event._id)" class="btn btn-success w-100">Join</button>
                                 </div>
                             </div>
                             <div class="col" v-if="event.UserID === user._id">
@@ -82,7 +82,7 @@
                         <br />
 
                         <div>
-                            <table class="table">
+                            <table class="table" v-if="Array.isArray(participants) && participants.length > 0">
                                 <thead class="table-dark">
                                     <tr>
                                         <th scope="col" style="width: 10%;">No.</th>
@@ -90,14 +90,14 @@
 
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row"></th>
-                                        <td></td>
-
+                                <tbody >
+                                    <tr v-for="(participant, index) in participants" :key="participant._id">
+                                        <th scope="row">{{ index + 1 }}</th>
+                                        <td>{{ participant.UserID.username}}</td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <p class="text-center" v-else>Currently no Participant!</p>
                         </div>
 
 
@@ -130,6 +130,7 @@ const router = useRouter()
 const id = route.params.id
 const event = ref({})
 const user = ref({})
+const participants = ref({})
 
 const getEvent = async () => {
   try {
@@ -165,8 +166,29 @@ const btnback = async () => {
   }
 }
 
-onMounted(() => {
-  getEvent()
-  getProfile()
+
+const joinEvent = async(id)=>{
+     try{
+        const result = axios.get(`http://localhost:3000/api/joinEvent/${user._id}/`+id)
+        console.log(result)
+
+    }catch(err){
+        console.log(err)
+}};
+
+const getAllParticipants = async()=>{
+    try{
+        const res = await axios.get(`http://localhost:3000/api/getAllParticipants/${event.value._id}`)
+        participants.value = res.data
+        
+
+    }catch(err){
+        console.log(err)
+    }
+}
+onMounted(async () => {
+    await getEvent();
+     await getAllParticipants();
+    await getProfile();
 })
 </script>

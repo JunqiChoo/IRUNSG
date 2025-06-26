@@ -29,6 +29,17 @@ const createUser = async(req,res)=>{
 }
 
 
+const getUser = async(req,res)=>{
+    await connectDB();
+    try{
+        const result = await useReducer.findById(req.params.id)
+        res.json(result)
+    }catch(err){
+            res.json(err)
+        }
+}
+
+
 
 const getProfile = async (req, res) => {
     connectDB();
@@ -42,4 +53,4 @@ const getProfile = async (req, res) => {
 }
 
 
-module.exports = {createUser,getProfile}
+module.exports = {createUser,getProfile,getUser}
