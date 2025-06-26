@@ -61,7 +61,8 @@
                                     <button @click="btnback" class="btn btn-primary w-100">Back</button>
                                 </div>
                                 <div class="col">
-                                    <button @click="joinEvent(event._id)" class="btn btn-success w-100">Join</button>
+                                    <button @click="joinEvent(user._id,event._id)" class="btn btn-success w-100" v-if="!JoinBool">Join</button>
+                                    <button @click="withdrawEvent(user._id,event._id)" class="btn btn-danger w-100" v-else>Withdraw</button>
                                 </div>
                             </div>
                             <div class="col" v-if="event.UserID === user._id">
@@ -131,6 +132,9 @@ const id = route.params.id
 const event = ref({})
 const user = ref({})
 const participants = ref({})
+const JoinBool = ref(false);
+//here
+
 
 const getEvent = async () => {
   try {
@@ -167,15 +171,30 @@ const btnback = async () => {
 }
 
 
-const joinEvent = async(id)=>{
-     try{
-        const result = axios.get(`http://localhost:3000/api/joinEvent/${user._id}/`+id)
-        console.log(result)
+const joinEvent = async(uid,id)=>{
+   try {
+    // 1. Check if user already participated
+    const checkRes = await axios.get(`http://localhost:3000/api/checkParticipatedUser/${uid}/${id}`);
 
-    }catch(err){
-        console.log(err)
-}};
+    // 2. If not participated (empty array), then join
+    if (Array.isArray(checkRes.data) && checkRes.data.length === 0) {
+      const joinRes = await axios.post(`http://localhost:3000/api/joinEvent/${uid}/${id}`);
+      console.log("User successfully joined:", joinRes.data);
+      JoinBool.value = true;
+      await getAllParticipants();   // Refresh list
+      await checkJoined();          // Refresh button state
+    } else {
+      console.log("User already joined. No action taken.");
+    }
+  } catch (err) {
+        
+  }
+};
 
+
+const withdrawEvent = async()=>{
+
+}
 const getAllParticipants = async()=>{
     try{
         const res = await axios.get(`http://localhost:3000/api/getAllParticipants/${event.value._id}`)
@@ -186,9 +205,28 @@ const getAllParticipants = async()=>{
         console.log(err)
     }
 }
+
+
+const checkJoined = async()=>{
+    try{
+         // 1. Check if user already participated
+    const checkRes = await axios.get(`http://localhost:3000/api/checkParticipatedUser/${user.value._id}/${id}`);
+     if (Array.isArray(checkRes.data) && checkRes.data.length === 0) {
+        JoinBool.value = false;
+     }else{
+        JoinBool.value = true;
+     }
+    }catch(err){
+
+    }
+}
+
+
+
 onMounted(async () => {
     await getEvent();
      await getAllParticipants();
     await getProfile();
+    await checkJoined();
 })
 </script>

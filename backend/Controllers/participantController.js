@@ -15,9 +15,11 @@ const joinEvent = async(req,res)=>{
         })
 
         const result = await newParticipant.save();
-        console.log(result)
+        
+        res.json(result)
     }catch(err){
-        console.log(err)
+        res.json(err)
+
     }
 }
 
@@ -34,4 +36,18 @@ const getAllParticipants = async(req,res)=>{
 
 }
 
-module.exports = {joinEvent,getAllParticipants}
+
+
+const checkParticipatedUser = async(req,res)=>{
+     const eventID = req.params.eid
+        const UserID =  req.params.id
+     await connectDB();
+     try{
+        const result = await Participant.find({UserID:UserID,eventID:eventID})
+        res.json(result)
+     }catch(err){
+        res.json(err);
+     }
+}
+
+module.exports = {joinEvent,getAllParticipants,checkParticipatedUser}
