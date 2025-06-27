@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                             <div class="col" v-if="event.UserID === user._id">
-                                <button class="btn btn-secondary w-100 mb-2">Edit</button>
+                                <button class="btn btn-secondary w-100 mb-2" @click="btnClickEdit(event._id)">Edit</button>
                             </div>
                             <div class="col" v-if="event.UserID === user._id">
                                 <button @click="btnCLickEventCompleted(event._id,event.points)" class="btn btn-warning mb-2 w-100">Event Completed</button>
@@ -230,7 +230,9 @@ const checkJoined = async()=>{
 
     }
 }
-
+const btnClickEdit = async(id)=>{
+    router.push(`/editEvent/${id}`)
+}
 
 const btnClickDeleteEvent = async(eid)=>{
     try{

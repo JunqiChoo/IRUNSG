@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand ms-3 fw-bold fs-3" href="#">IRUNSG</a>
+    <a class="navbar-brand ms-3 fw-bold fs-3" @click="btnHome">IRUNSG</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,19 +9,19 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Past Events</a>
-        </li>
         <li class="nav-item active">
           <a class="nav-link" @click="btnClickAddEvent" >Create Event</a>
         </li>
+         <li class="nav-item active">
+          <a class="nav-link" @click="btnClickCompletedEvent" >Completed Event</a>
+        </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Rewards</a>
+          <a class="nav-link" @click="btnClickRewards">Rewards</a>
         </li>
       </ul>
 
       <!-- Logout Button floated right -->
-      <button class="btn btn-outline-secondary ms-auto me-3">Logout</button>
+      <button class="btn btn-outline-secondary ms-auto me-3" @click="btnLogOut">Logout</button>
     </div>
   </nav>
 </template>
@@ -40,4 +40,23 @@ const router = useRouter()
 const btnClickAddEvent = () => {
   router.push('/addEvent')
 }
+
+const btnClickCompletedEvent = async()=>{
+  router.push("/completedEvent")
+}
+
+
+const btnHome = async()=>{
+  router.push("/home")
+}
+const btnClickRewards = async()=>{
+  router.push("/rewards")
+}
+
+const btnLogOut = async()=>{
+  localStorage.removeItem("token"); 
+  router.push("/login");
+}
+
+
 </script>

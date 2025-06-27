@@ -4,9 +4,9 @@
       <div class="col-1"></div>
       <div class="col-10">
         <div class="card text-center">
-          <div class="card-header fw-bold">ADD EVENT</div>
+          <div class="card-header fw-bold">EDIT EVENT</div>
           <div class="card-body">
-            <form @submit.prevent="addRunEvent">
+            <form @submit.prevent="editEvent">
               <div class="form-group mb-3">
                 <input v-model="event.eventName" type="text" class="form-control" placeholder="Enter Event Name" />
               </div>
@@ -77,15 +77,15 @@
                   </div>
                   <div class="col">
                     <button type="submit" class="btn btn-primary w-100" style="width: 40%;">
-                      CREATE EVENT
-                    </button>
+                  SAVE CHNAGES
+                </button>
                   </div>
 
                 </div>
               </div>
 
               <div class="d-flex justify-content-center gap-3">
-
+                
 
               </div>
             </form>
@@ -104,10 +104,12 @@ onMounted(() => {
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 import Datepicker from 'vue3-datepicker'
 
 
+
+const route = useRoute()
 const user = ref(null)
 const toast = useToast()
 const router = useRouter()
@@ -151,23 +153,36 @@ const getProfile = async () => {
     }
 }
 
-const addRunEvent = async () => {
+const editEvent = async () => {
   try {
-    const payload = { ...event.value }
-    console.log(payload)
-    if (payload.date instanceof Date) {
-      payload.date = payload.date.toISOString()
-    } else {
-      console.error(" Invalid date:", payload.date)
-      return
-    }
-
-    const res = await axios.post("http://localhost:3000/api/createEvent", event.value)
-    console.log("✅ Created:", res.data)
-    router.push("/home")
+    const res = await axios.put(
+      `http://localhost:3000/api/editEvent/${route.params.id}`,
+      event.value
+    );
+    console.log('Event updated successfully:', res.data);
+    // Optional: show a toast or redirect the user
+    router.push('/home')
   } catch (err) {
-    console.error("API Error:", err)
+    console.error('Error updating event:', err);
+    // Optional: show an error toast or message to the user
+  }
+};
+
+const getEvent = async () => {
+  try{
+    const res = await axios.get(`http://localhost:3000/api/getEvent/${route.params.id}`)
+    event.value = res.data;
+    event.value.date = new Date(res.data.date) 
+    console.log(res)
+  }catch(err){
+    console.log(err);
   }
 }
+onMounted(async() => {
+  
+  await getProfile();
+  await getEvent();
+  
+})
 
 </script>

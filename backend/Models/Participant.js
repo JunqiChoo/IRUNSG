@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 const participantSchema = new Schema({
     eventID:{
         type:String,
-        required:true
+        required:true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event',
     },UserID:{
         type:String,
         required:true,

@@ -9,7 +9,7 @@
           <div class="pb-2">
             <div class="card">
               <div class="card-body">
-                <h4 v-if="user">POINTS: {{ user.points }}</h4>
+                <h4 v-if="user">POINTS: <span class="text-warning">{{ user.points }}</span></h4>
                 <p v-else>Loading points...</p>
               </div>
             </div>

@@ -58,6 +58,17 @@ const updateEventCompletionStatus = async(req,res)=>{
         res.json(err);
     }
 }
+const getParticipatedData = async (req, res) => {
+    const id = req.params.id;
+    connectDB();
+
+    try {
+        const result = await Participant.find({ UserID: id }).populate('eventID');
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
 
 
 
@@ -73,4 +84,4 @@ const checkParticipatedUser = async(req,res)=>{
      }
 }
 
-module.exports = {joinEvent,getAllParticipants,checkParticipatedUser,withdrawEvent,updateEventCompletionStatus}
+module.exports = {joinEvent,getAllParticipants,checkParticipatedUser,withdrawEvent,updateEventCompletionStatus,getParticipatedData}

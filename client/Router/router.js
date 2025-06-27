@@ -5,7 +5,9 @@ import Register from "../src/components/Register.vue"
 import Home from "../src/components/Home.vue"
 import AddEvent from "../src/components/AddEvent.vue"
 import ViewEvent from "../src/components/ViewEvent.vue"
-
+import RewardsPage from "../src/components/RewardsPage.vue"
+import CompletedEvent from "../src/components/CompletedEvent.vue"
+import EditEvent from "../src/components/EditEvent.vue"
 const routes = [
   
     { path: '/login',
@@ -28,6 +30,18 @@ const routes = [
     { path: '/viewEvent/:id',
         name: 'ViewEvent', 
         component: ViewEvent 
+    },
+    { path: '/rewards',
+        name: 'RewardsPage', 
+        component: RewardsPage 
+    },
+    { path: '/completedEvent',
+        name: 'CompletedEvent', 
+        component: CompletedEvent 
+    },
+    { path: '/editEvent/:id',
+        name: 'EditEvent', 
+        component: EditEvent 
     }
 ]
 

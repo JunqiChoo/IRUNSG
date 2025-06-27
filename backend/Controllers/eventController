@@ -89,6 +89,35 @@ const getEvent = async(req,res)=>{
 };
 
 
+const editEvent = async(req,res)=>{
+  const eventID = req.params.eid
+  const {
+      eventName,
+      postal,
+      runtype,
+      distance,
+      duration,
+      date,
+      region
+    } = req.body;
+  try{
+    const result = await Event.findByIdAndUpdate(eventID,{
+       eventName:eventName,
+      postal:postal,
+      runtype:runtype,
+      distance:distance,
+      duration:duration,
+      date:new Date(date),
+      region:region,
+    })
+    res.json(result)
+  }catch(err){
+    res.json(err)
+  }
+
+}
+
+
 
 const completeEvent = async(req,res)=>{
     const eventID = req.params.eid
@@ -117,4 +146,4 @@ const deleteEvent = async(req,res)=>{
 }
 
 
-module.exports = {getAllEvents,getChartData,createEvent,getEvent,completeEvent,deleteEvent}
+module.exports = {getAllEvents,getChartData,createEvent,getEvent,completeEvent,deleteEvent,editEvent}
