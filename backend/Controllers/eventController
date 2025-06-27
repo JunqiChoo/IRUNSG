@@ -1,6 +1,6 @@
 
-const mongoose = require('mongoose');
 const Event = require("../Models/Event"); // Adjust the path as needed
+const Participant = require("../Models/Participant");
 const connectDB = require('../Database/MongoDB');
 
 
@@ -102,5 +102,19 @@ const completeEvent = async(req,res)=>{
 }
 
 
+const deleteEvent = async(req,res)=>{
+    const eventID = req.params.eid
+    await connectDB();
+    try{
+        const result = await Event.findByIdAndDelete(eventID)
+        //here to delete the user from Participation list
+        const delParticipantsResult = await Participant.deleteMany({eventID:eventID})
+        await res.json(result)
+    }catch(err){
+      res.json(err);
+    }
 
-module.exports = {getAllEvents,getChartData,createEvent,getEvent,completeEvent}
+}
+
+
+module.exports = {getAllEvents,getChartData,createEvent,getEvent,completeEvent,deleteEvent}

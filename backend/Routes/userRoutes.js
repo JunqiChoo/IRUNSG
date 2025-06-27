@@ -7,7 +7,7 @@ const {CompareUser} = require("../Controllers/auth")
 const {getProfile} = require("../Controllers/userController")
 const {getUser} = require("../Controllers/userController")
 const auth = require("../middleware/authMiddleware");
-const {getAllEvents} = require("../Controllers/eventController")
+const {getAllEvents,deleteEvent} = require("../Controllers/eventController")
 
 const {completeEvent} = require("../Controllers/eventController")
 const {getChartData} = require("../Controllers/eventController");
@@ -15,7 +15,7 @@ const { createEvent } = require("../Controllers/eventController");
 const {getEvent} = require("../Controllers/eventController")
 const {joinEvent} = require("../Controllers/participantController")
 const {getAllParticipants} = require("../Controllers/participantController")
-const {checkParticipatedUser,withdrawEvent} = require("../Controllers/participantController")
+const {checkParticipatedUser,withdrawEvent,updateEventCompletionStatus} = require("../Controllers/participantController")
 
 
 //getting all the task
@@ -35,12 +35,14 @@ router.route("/getChartData").get(getChartData);
 router.route("/createEvent").post(createEvent);
 router.route("/getEvent/:id").get(getEvent);
 router.route("/completeEvent/:eid").put(completeEvent);
+router.route("/deleteEvent/:eid").delete(deleteEvent);
 
 //for participants route
 router.route("/joinEvent/:id/:eid").post(joinEvent)
 router.route("/withdrawEvent/:id/:eid").delete(withdrawEvent)
 router.route("/getAllParticipants/:eid").get(getAllParticipants)
 router.route("/checkParticipatedUser/:id/:eid").get(checkParticipatedUser)
+router.route("/updateEventCompletionStatus/:id").put(updateEventCompletionStatus)
 
 
 

@@ -72,7 +72,7 @@
                                 <button @click="btnCLickEventCompleted(event._id,event.points)" class="btn btn-warning mb-2 w-100">Event Completed</button>
                             </div>
                             <div class="col" v-if="event.UserID === user._id">
-                                <button class="btn btn-danger w-100">Delete Event</button>
+                                <button class="btn btn-danger w-100" @click="btnClickDeleteEvent(event._id)">Delete Event</button>
                             </div>
                             <div v-else class="text-center">This event is not organised by you.</div>
                         </div>
@@ -231,6 +231,18 @@ const checkJoined = async()=>{
     }
 }
 
+
+const btnClickDeleteEvent = async(eid)=>{
+    try{
+        const res = await axios.delete(`http://localhost:3000/api/deleteEvent/${eid}`)
+        console.log(res)
+        router.push("/home")
+    }catch(err){
+        console.log(err)
+    }
+}
+
+
 const btnCLickEventCompleted = async(eid, points) => {
   try {
     const result = await axios.put(`http://localhost:3000/api/completeEvent/${eid}`);
@@ -238,12 +250,9 @@ const btnCLickEventCompleted = async(eid, points) => {
     console.log(participants.value)
     for (const i of participants.value) {
         const Npoints = Number(points);
-        let tempdata = await axios.put(`http://localhost:3000/api/updatePoints/${i.UserID._id}/${Npoints}`);
-        console.log("hit loop x");
-        console.log(i.UserID._id+"/"+points)
-        console.log(typeof Npoints)
-        console.log("hit loop x");
-        console.log(tempdata)
+        await axios.put(`http://localhost:3000/api/updatePoints/${i.UserID._id}/${Npoints}`);
+        await axios.put(`http://localhost:3000/api/updateEventCompletionStatus/${i.UserID._id}`)
+        
     }
     
     await router.push("/home");

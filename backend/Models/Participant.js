@@ -11,6 +11,10 @@ const participantSchema = new Schema({
          type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
        
+    },EventCompletion:{
+        type:Boolean,
+        required:true,
+        default:false
     }
 });
 

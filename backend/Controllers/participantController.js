@@ -48,6 +48,19 @@ const getAllParticipants = async(req,res)=>{
 
 
 
+const updateEventCompletionStatus = async(req,res)=>{
+    const id = req.params.id
+    connectDB();
+    try{
+        const result = await Participant.findOneAndUpdate({UserID:id},{EventCompletion:true});
+        res.json(result);
+    }catch(err){
+        res.json(err);
+    }
+}
+
+
+
 const checkParticipatedUser = async(req,res)=>{
      const eventID = req.params.eid
         const UserID =  req.params.id
@@ -60,4 +73,4 @@ const checkParticipatedUser = async(req,res)=>{
      }
 }
 
-module.exports = {joinEvent,getAllParticipants,checkParticipatedUser,withdrawEvent}
+module.exports = {joinEvent,getAllParticipants,checkParticipatedUser,withdrawEvent,updateEventCompletionStatus}
