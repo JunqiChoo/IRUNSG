@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 require('dotenv').config();
 
-const {createUser} = require("../Controllers/userController")
+const {createUser,updatePoints} = require("../Controllers/userController")
 const {CompareUser} = require("../Controllers/auth")
 const {getProfile} = require("../Controllers/userController")
 const {getUser} = require("../Controllers/userController")
 const auth = require("../middleware/authMiddleware");
 const {getAllEvents} = require("../Controllers/eventController")
+
+const {completeEvent} = require("../Controllers/eventController")
 const {getChartData} = require("../Controllers/eventController");
 const { createEvent } = require("../Controllers/eventController");
 const {getEvent} = require("../Controllers/eventController")
@@ -25,12 +27,14 @@ router.route("/register").post(createUser);
 router.route("/login").post(CompareUser)
 router.route("/getProfile").get(auth,getProfile)
 router.route("/getUser/:id").get(getUser)
+router.route("/updatePoints/:id/:points").put(updatePoints)
 
 //for Events
 router.route("/getAllEvents").get(getAllEvents);
 router.route("/getChartData").get(getChartData);
 router.route("/createEvent").post(createEvent);
 router.route("/getEvent/:id").get(getEvent);
+router.route("/completeEvent/:eid").put(completeEvent);
 
 //for participants route
 router.route("/joinEvent/:id/:eid").post(joinEvent)

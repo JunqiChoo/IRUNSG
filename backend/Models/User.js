@@ -7,7 +7,7 @@ const userSchema = new Schema({
     email: { type: String, unique: true },
     password: String,
     postalCode: Number,
-    points: { type: Number, default: 0 }
+    points: { type: Number, required: true,default: 0 }
 })
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();

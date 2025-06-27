@@ -28,11 +28,24 @@ const createUser = async(req,res)=>{
     }
 }
 
+const updatePoints = async(req, res) => {
+    await connectDB();
+    try {
+        const result = await User.findByIdAndUpdate(
+             req.params.id , { $inc: { points: Number(req.params.points) } },
+  { new: true, runValidators: true }
+);
+        await res.json(result)
+    } catch (err) {
+        res.json(err);
+    }
+}
+
 
 const getUser = async(req,res)=>{
     await connectDB();
     try{
-        const result = await useReducer.findById(req.params.id)
+        const result = await User.findById(req.params.id)
         res.json(result)
     }catch(err){
             res.json(err)
@@ -53,4 +66,4 @@ const getProfile = async (req, res) => {
 }
 
 
-module.exports = {createUser,getProfile,getUser}
+module.exports = {createUser,getProfile,getUser,updatePoints}

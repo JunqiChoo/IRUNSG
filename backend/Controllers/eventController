@@ -90,5 +90,17 @@ const getEvent = async(req,res)=>{
 
 
 
+const completeEvent = async(req,res)=>{
+    const eventID = req.params.eid
+    await connectDB();
+    try{
+      const result = await Event.findByIdAndUpdate(eventID,{EventStatus:true}, { new: true })
+      res.json(result)
+    }catch(err){
+      res.json(err);
+    }
+}
 
-module.exports = {getAllEvents,getChartData,createEvent,getEvent}
+
+
+module.exports = {getAllEvents,getChartData,createEvent,getEvent,completeEvent}

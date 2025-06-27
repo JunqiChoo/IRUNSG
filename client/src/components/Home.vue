@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 v-if="user" class="text-center m-4 fst-italic">Welcome back, {{ user.username }}</h3>
+    <h3 v-if="user" class="text-center fst-italic m-4">Welcome back, {{ user.username }}</h3>
     <p v-else>Loading user...</p>
 
     <div class="container">
@@ -120,18 +120,14 @@ const viewEvent = async(id)=>{
   try{
     router.push("/viewEvent/"+id)
   }catch(err){
-    console.log("an error occured when transporting you to viewevents page")
+    console.log("an error occured when transporting you to Viewing")
   }
-  
 }
 
-
-
-
-onMounted(() => {
-  getChartData()
-  getProfile()
-  getAllEvents()
+onMounted(async() => {
+  await getProfile();
+  await getChartData();
+  await getAllEvents();
   
 })
 </script>

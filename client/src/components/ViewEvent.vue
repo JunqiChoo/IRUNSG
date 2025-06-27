@@ -25,7 +25,7 @@
                                         <div class="col">
                                             <div class="card">
                                                 <div class="card-body text-center">
-                                                    <label> {{ event.Duration }}min</label>
+                                                    <label> {{ event.duration }}min</label>
                                                 </div>
                                             </div>
 
@@ -69,7 +69,10 @@
                                 <button class="btn btn-secondary w-100 mb-2">Edit</button>
                             </div>
                             <div class="col" v-if="event.UserID === user._id">
-                                <button class="btn btn-danger w-100">Event Completed</button>
+                                <button @click="btnCLickEventCompleted(event._id,event.points)" class="btn btn-warning mb-2 w-100">Event Completed</button>
+                            </div>
+                            <div class="col" v-if="event.UserID === user._id">
+                                <button class="btn btn-danger w-100">Delete Event</button>
                             </div>
                             <div v-else class="text-center">This event is not organised by you.</div>
                         </div>
@@ -131,9 +134,9 @@ const router = useRouter()
 const id = route.params.id
 const event = ref({})
 const user = ref({})
-const participants = ref({})
+const participants = ref([])
 const JoinBool = ref(false);
-//here
+
 
 
 const getEvent = async () => {
@@ -227,6 +230,29 @@ const checkJoined = async()=>{
 
     }
 }
+
+const btnCLickEventCompleted = async(eid, points) => {
+  try {
+    const result = await axios.put(`http://localhost:3000/api/completeEvent/${eid}`);
+    console.log(result);
+    console.log(participants.value)
+    for (const i of participants.value) {
+        const Npoints = Number(points);
+        let tempdata = await axios.put(`http://localhost:3000/api/updatePoints/${i.UserID._id}/${Npoints}`);
+        console.log("hit loop x");
+        console.log(i.UserID._id+"/"+points)
+        console.log(typeof Npoints)
+        console.log("hit loop x");
+        console.log(tempdata)
+    }
+    
+    await router.push("/home");
+  } catch (err) {
+    console.error("Error:", err.response?.data || err.message);
+  }
+};
+
+
 onMounted(async () => {
     await getEvent();
      await getAllParticipants();
