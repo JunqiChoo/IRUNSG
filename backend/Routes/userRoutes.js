@@ -7,14 +7,14 @@ const {CompareUser} = require("../Controllers/auth")
 const {getProfile} = require("../Controllers/userController")
 const {getUser} = require("../Controllers/userController")
 const auth = require("../middleware/authMiddleware");
-const {getAllEvents,deleteEvent} = require("../Controllers/eventController")
+const {getAllEventsOngoing,getAllEventsCompleted,deleteEvent} = require("../Controllers/eventController")
 
 const {completeEvent} = require("../Controllers/eventController")
 const {getChartData} = require("../Controllers/eventController");
 const { createEvent } = require("../Controllers/eventController");
 const {getEvent,editEvent} = require("../Controllers/eventController")
 const {joinEvent} = require("../Controllers/participantController")
-const {getAllParticipants} = require("../Controllers/participantController")
+const {getAllParticipants,getAllCompletedParticipant} = require("../Controllers/participantController")
 const {checkParticipatedUser,withdrawEvent,updateEventCompletionStatus,getParticipatedData} = require("../Controllers/participantController")
 
 
@@ -30,7 +30,8 @@ router.route("/getUser/:id").get(getUser)
 router.route("/updatePoints/:id/:points").put(updatePoints)
 
 //for Events
-router.route("/getAllEvents").get(getAllEvents);
+router.route("/getAllEventsOngoing").get(getAllEventsOngoing);
+router.route("/getAllEventsCompleted/:id").get(getAllEventsCompleted);
 router.route("/getChartData").get(getChartData);
 router.route("/createEvent").post(createEvent);
 router.route("/getEvent/:id").get(getEvent);
@@ -45,6 +46,8 @@ router.route("/getAllParticipants/:eid").get(getAllParticipants)
 router.route("/checkParticipatedUser/:id/:eid").get(checkParticipatedUser)
 router.route("/updateEventCompletionStatus/:id").put(updateEventCompletionStatus)
 router.route("/getParticipatedData/:id").get(getParticipatedData)
+router.route("/getAllCompletedParticipant/:id").get(getAllCompletedParticipant)
+
 
 
 //router.route("/:id").put(updateUser);

@@ -18,6 +18,8 @@
                                 <br />
                                 <label>Date: {{ event.date }}</label>
                                 <br />
+                                  <label>Postal: {{ event.postal }}</label>
+                                <br />
 
                                 <br />
                                 <div class="container ">
@@ -55,26 +57,37 @@
                                 </h5>
                             </div>
                         </div>
-                        <div class="container">
+                        <div class="container" v-if="!ViewOnlyBool">
                             <div class="row mb-2">
                                 <div class="col">
                                     <button @click="btnback" class="btn btn-primary w-100">Back</button>
                                 </div>
                                 <div class="col">
-                                    <button @click="joinEvent(user._id,event._id)" class="btn btn-success w-100" v-if="!JoinBool">Join</button>
-                                    <button @click="withdrawEvent(user._id,event._id)" class="btn btn-danger w-100" v-else>Withdraw</button>
+                                    <button @click="joinEvent(user._id,event._id)" class="btn btn-success w-100" v-if="!JoinBool && !ViewOnlyBool">Join</button>
+                                    <button @click="withdrawEvent(user._id,event._id)" class="btn btn-danger w-100" v-else =" !ViewOnlyBool">Withdraw</button>
                                 </div>
                             </div>
-                            <div class="col" v-if="event.UserID === user._id">
+                            <div class="col" v-if="event.UserID === user._id && !ViewOnlyBool">
                                 <button class="btn btn-secondary w-100 mb-2" @click="btnClickEdit(event._id)">Edit</button>
                             </div>
-                            <div class="col" v-if="event.UserID === user._id">
+                            <div class="col" v-if="event.UserID === user._id && !ViewOnlyBool">
                                 <button @click="btnCLickEventCompleted(event._id,event.points)" class="btn btn-warning mb-2 w-100">Event Completed</button>
                             </div>
-                            <div class="col" v-if="event.UserID === user._id">
+                            <div class="col" v-if="event.UserID === user._id && !ViewOnlyBool">
                                 <button class="btn btn-danger w-100" @click="btnClickDeleteEvent(event._id)">Delete Event</button>
                             </div>
+
                             <div v-else class="text-center">This event is not organised by you.</div>
+                        </div>
+                           <div class="container" v-else>
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <button class="btn btn-primary w-100" @click="btnClickBackFromCompleted">Back</button>
+                                </div>
+                                 <div class="col">
+                                    <button class="btn btn-danger w-100" @click="btnClickDeleteEvent(event._id)">Delete Event</button>
+                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,6 +136,8 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast();
 
 // Optional: only if you're using toast notifications
 // import { useToast } from 'vue-toastification'
@@ -136,17 +151,27 @@ const event = ref({})
 const user = ref({})
 const participants = ref([])
 const JoinBool = ref(false);
+const ViewOnlyBool = ref(false);
 
 
 
 const getEvent = async () => {
   try {
     const res = await axios.get(`http://localhost:3000/api/getEvent/${id}`)
+    console.log(res.data.EventStatus)
+    if(!res.data.EventStatus){
+        ViewOnlyBool.value = false
+    }else{
+        ViewOnlyBool.value = true
+    }
     event.value = res.data
     console.log("Event data:", res.data)
   } catch (err) {
     console.log("Error occurred while retrieving the event:", err)
   }
+}
+const btnClickBackFromCompleted = async()=>{
+    router.push(`/completedEvent/${user.value._id}`)
 }
 
 const getProfile = async () => {
@@ -186,6 +211,7 @@ const joinEvent = async(uid,id)=>{
       JoinBool.value = true;
       await getAllParticipants();   // Refresh list
       await checkJoined();          // Refresh button state
+      toast.success(`Successfully enroll into the event (${event.value.eventName})`)
     } else {
       console.log("User already joined. No action taken.");
     }
@@ -201,6 +227,7 @@ const withdrawEvent = async(uid,id)=>{
         JoinBool.value = false;
         console.log(result)
         await getAllParticipants(); 
+        toast.success(`Successfully withdrawn from the event (${event.value.eventName})`)
     }catch(err){
         console.log(err)
     }
@@ -238,6 +265,7 @@ const btnClickDeleteEvent = async(eid)=>{
     try{
         const res = await axios.delete(`http://localhost:3000/api/deleteEvent/${eid}`)
         console.log(res)
+        toast.success(`Successfully deleted event (${event.value.eventName})`)
         router.push("/home")
     }catch(err){
         console.log(err)
@@ -256,7 +284,7 @@ const btnCLickEventCompleted = async(eid, points) => {
         await axios.put(`http://localhost:3000/api/updateEventCompletionStatus/${i.UserID._id}`)
         
     }
-    
+    toast.success(`successfully Completed the event rewareds are awarded to all the ${participants.value.length} participants`)
     await router.push("/home");
   } catch (err) {
     console.error("Error:", err.response?.data || err.message);

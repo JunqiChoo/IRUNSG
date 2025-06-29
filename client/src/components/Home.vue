@@ -72,6 +72,7 @@ const user = ref(null)
 const events = ref([])
 const ChartCount = ref(null) 
 
+
 const getProfile = async () => {
   try {
     const res = await axios.get('http://localhost:3000/api/getProfile', {
@@ -90,7 +91,7 @@ const getProfile = async () => {
 
 const getAllEvents = async () => {
   try {
-    let res = await axios.get("http://localhost:3000/api/getAllEvents")
+    let res = await axios.get("http://localhost:3000/api/getAllEventsOngoing")
     events.value = res.data
   } catch (err) {
     console.log(err)

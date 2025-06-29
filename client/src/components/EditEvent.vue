@@ -160,10 +160,11 @@ const editEvent = async () => {
       event.value
     );
     console.log('Event updated successfully:', res.data);
-    // Optional: show a toast or redirect the user
+    toast.success("Event updated successfully")
     router.push('/home')
   } catch (err) {
     console.error('Error updating event:', err);
+    toast.error("error updating")
     // Optional: show an error toast or message to the user
   }
 };

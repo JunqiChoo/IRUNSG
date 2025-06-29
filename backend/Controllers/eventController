@@ -1,22 +1,27 @@
 
-const Event = require("../Models/Event"); // Adjust the path as needed
+const Event = require("../Models/Event");
 const Participant = require("../Models/Participant");
 const connectDB = require('../Database/MongoDB');
-
-
-const getAllEvents = async(req,res)=>{
+const getAllEventsOngoing = async(req,res)=>{
     await connectDB();
     try{
-        const events = await Event.find();
-       
+        const events = await Event.find({EventStatus:false});
+        res.json(events)
+    }catch(err){
+        console.log(err)
+    }
+}
+const getAllEventsCompleted = async(req,res)=>{
+  const UserID = req.params.id
+    await connectDB();
+    try{
+        const events = await Event.find({EventStatus:true,UserID:UserID});
         res.json(events)
        
     }catch(err){
         console.log(err)
     }
 }
-
-
 const getChartData = async (req, res) => {
   await connectDB();
   try {
@@ -28,7 +33,6 @@ const getChartData = async (req, res) => {
         regionCount[event.region] = (regionCount[event.region] || 0) + 1;
       }
     });
-
     console.log("Region counts:", regionCount); 
     res.json(regionCount);  // ✅ Send the full object
   } catch (err) {
@@ -87,8 +91,6 @@ const getEvent = async(req,res)=>{
     console.log(err)
   }
 };
-
-
 const editEvent = async(req,res)=>{
   const eventID = req.params.eid
   const {
@@ -114,11 +116,7 @@ const editEvent = async(req,res)=>{
   }catch(err){
     res.json(err)
   }
-
 }
-
-
-
 const completeEvent = async(req,res)=>{
     const eventID = req.params.eid
     await connectDB();
@@ -129,8 +127,6 @@ const completeEvent = async(req,res)=>{
       res.json(err);
     }
 }
-
-
 const deleteEvent = async(req,res)=>{
     const eventID = req.params.eid
     await connectDB();
@@ -145,5 +141,4 @@ const deleteEvent = async(req,res)=>{
 
 }
 
-
-module.exports = {getAllEvents,getChartData,createEvent,getEvent,completeEvent,deleteEvent,editEvent}
+module.exports = {getAllEventsOngoing,getAllEventsCompleted,getChartData,createEvent,getEvent,completeEvent,deleteEvent,editEvent}

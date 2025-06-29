@@ -30,6 +30,13 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast();
+
+const user = ref(null)
 
 defineOptions({
   name: 'Header'
@@ -42,7 +49,7 @@ const btnClickAddEvent = () => {
 }
 
 const btnClickCompletedEvent = async()=>{
-  router.push("/completedEvent")
+  router.push(`/completedEvent/${user.value._id}`)
 }
 
 
@@ -55,8 +62,32 @@ const btnClickRewards = async()=>{
 
 const btnLogOut = async()=>{
   localStorage.removeItem("token"); 
+  toast.success(`Log out successful`)
   router.push("/login");
 }
 
+
+const getProfile = async () => {
+  try {
+    const res = await axios.get('http://localhost:3000/api/getProfile', {
+      headers: {
+        'x-auth-token': localStorage.getItem('token')
+      }
+    })
+    user.value = res.data
+    console.log("Logged-in user:", res.data)
+  } catch (err) {
+    console.error(err)
+    toast.error('Failed to load profile')
+    router.push('/login')
+  }
+}
+
+
+onMounted(async() => {
+  await getProfile();
+
+  
+})
 
 </script>

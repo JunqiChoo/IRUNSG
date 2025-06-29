@@ -35,7 +35,7 @@ const routes = [
         name: 'RewardsPage', 
         component: RewardsPage 
     },
-    { path: '/completedEvent',
+    { path: '/completedEvent/:id',
         name: 'CompletedEvent', 
         component: CompletedEvent 
     },

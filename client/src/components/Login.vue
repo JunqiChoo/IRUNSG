@@ -59,11 +59,6 @@
         email:'',
         password:''
     })
-
-
-
-
-
 const loginUser = async () => {
   try {
     const res = await axios.post('http://localhost:3000/api/login', {
@@ -75,7 +70,6 @@ const loginUser = async () => {
     toast.success('Login successful!');
     router.push('/Home'); // or whatever route you use
   } catch (err) {
-    toast.error('Login failed.');
     console.error(err);
     router.push('/login')
     toast.error("Username or password inavlid, please try again.....")

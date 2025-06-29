@@ -37,7 +37,7 @@ const getAllParticipants = async(req,res)=>{
      await connectDB();
     const eventID = req.params.eid
     try{
-        const result = await Participant.find({eventID:eventID}).populate('UserID')
+        const result = await Participant.find({eventID:eventID}).populate('UserID').populate('eventID')
         console.log(result)
         res.json(result)
     }catch(err){
@@ -45,6 +45,23 @@ const getAllParticipants = async(req,res)=>{
     }
 
 }
+
+const getAllCompletedParticipant = async(req,res)=>{
+    const id = req.params.id
+      await connectDB();
+      try{
+          const result = await Participant.find({UserID:id}).populate('UserID').populate('eventID')
+          res.json(result)
+      }catch(err){
+            res.json(err)
+      }
+}
+
+
+
+
+
+
 
 
 
@@ -84,4 +101,4 @@ const checkParticipatedUser = async(req,res)=>{
      }
 }
 
-module.exports = {joinEvent,getAllParticipants,checkParticipatedUser,withdrawEvent,updateEventCompletionStatus,getParticipatedData}
+module.exports = {joinEvent,getAllParticipants,checkParticipatedUser,withdrawEvent,updateEventCompletionStatus,getParticipatedData,getAllCompletedParticipant}
