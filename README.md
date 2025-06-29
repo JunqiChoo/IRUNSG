@@ -7,9 +7,13 @@ progress - currently 30% done
 ---
 ## ScreenShots
 
-![Register screenshot](./IRUNSG_Register.png)
-![Login screenshot](./IRUNSG_Login.png)
-![Home screenshot](./IRUNSG_Home.png)
+![Register screenshot](./Register.png)
+![Login screenshot](./Login.png)
+![Home screenshot](./HomePage.png)
+![Create Event screenshot](./create.png)
+![View Event screenshot](./ViewEvent.png)
+![Rewards screenshot](./rewards.png)
+
 
 ## Features
 

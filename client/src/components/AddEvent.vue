@@ -164,6 +164,7 @@ const addRunEvent = async () => {
 
     const res = await axios.post("http://localhost:3000/api/createEvent", event.value)
     console.log("✅ Created:", res.data)
+    toast.success("Added new event")
     router.push("/home")
   } catch (err) {
     console.error("API Error:", err)
