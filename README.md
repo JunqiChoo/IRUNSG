@@ -1,6 +1,6 @@
 # IRUNSG 🏃
 
-progress - currently 30% done
+progress - currently 80% done (left displaying minimap using onemap and redemption of rewards via email api)
 
 **IRUNSG** is a full-stack web application built with **Vue.js**, **Express**, and **MongoDB**, designed to bring runners together to discover, organize, and join running events. The platform fosters **community, cohesion, and love for the sport** while offering a reward system that encourages participation.
 
