@@ -19,7 +19,7 @@
                                 <label>Date: {{ Date(event.date) }}</label>
                                 <br />
                                  <div class="container">
-                                    <div id="map" style="height: 400px; width: 100%;"></div>
+                                    <div id="map" style="height: 200px; width: 100%;"></div>
                                 </div>
                                 <br />
                                 <div class="container ">
