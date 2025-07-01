@@ -6,6 +6,7 @@ const app = express();
 const PORT = 3000;
 const User = require("./Models/User.js")
 
+app.use(cors());
 
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }));

@@ -57,14 +57,6 @@ const getAllCompletedParticipant = async(req,res)=>{
       }
 }
 
-
-
-
-
-
-
-
-
 const updateEventCompletionStatus = async(req,res)=>{
     const id = req.params.id
     connectDB();

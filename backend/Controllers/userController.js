@@ -4,6 +4,8 @@ const User = require("../Models/User"); // Adjust the path as needed
 const connectDB = require('../Database/MongoDB');
 const bcrypt = require('bcrypt');
 
+const axios = require("axios");
+
 //getUser,updateUser,deleteUser,createUser
 
 //logical messy part here 
@@ -26,6 +28,18 @@ const createUser = async(req,res)=>{
     }catch(err){
         console.log(err)
     }
+}
+
+
+const getLongLat = async(req,res)=>{
+    const postalcode = req.params.postal
+    try{
+        const response = await axios.get(`https://www.onemap.gov.sg/api/common/elastic/search?searchVal=${postalcode}&returnGeom=Y&getAddrDetails=Y`)
+        res.json(response.data)
+    }catch(err){
+        res.json(err)
+    }
+  
 }
 
 const updatePoints = async(req, res) => {
@@ -66,4 +80,4 @@ const getProfile = async (req, res) => {
 }
 
 
-module.exports = {createUser,getProfile,getUser,updatePoints}
+module.exports = {createUser,getProfile,getUser,updatePoints,getLongLat}

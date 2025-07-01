@@ -16,11 +16,11 @@
                             <div class="card-body">
                                 <label>Run type: {{ event.runtype }}</label>
                                 <br />
-                                <label>Date: {{ event.date }}</label>
+                                <label>Date: {{ Date(event.date) }}</label>
                                 <br />
-                                  <label>Postal: {{ event.postal }}</label>
-                                <br />
-
+                                 <div class="container">
+                                    <div id="map" style="height: 400px; width: 100%;"></div>
+                                </div>
                                 <br />
                                 <div class="container ">
                                     <div class="row">
@@ -55,6 +55,7 @@
                                     <p class="text-warning"> {{ event.points }}</p>
 
                                 </h5>
+                               
                             </div>
                         </div>
                         <div class="container" v-if="!ViewOnlyBool">
@@ -63,30 +64,37 @@
                                     <button @click="btnback" class="btn btn-primary w-100">Back</button>
                                 </div>
                                 <div class="col">
-                                    <button @click="joinEvent(user._id,event._id)" class="btn btn-success w-100" v-if="!JoinBool && !ViewOnlyBool">Join</button>
-                                    <button @click="withdrawEvent(user._id,event._id)" class="btn btn-danger w-100" v-else =" !ViewOnlyBool">Withdraw</button>
+                                    <button @click="joinEvent(user._id,event._id)" class="btn btn-success w-100"
+                                        v-if="!JoinBool && !ViewOnlyBool">Join</button>
+                                    <button @click="withdrawEvent(user._id,event._id)" class="btn btn-danger w-100"
+                                        v-else=" !ViewOnlyBool">Withdraw</button>
                                 </div>
                             </div>
                             <div class="col" v-if="event.UserID === user._id && !ViewOnlyBool">
-                                <button class="btn btn-secondary w-100 mb-2" @click="btnClickEdit(event._id)">Edit</button>
+                                <button class="btn btn-secondary w-100 mb-2"
+                                    @click="btnClickEdit(event._id)">Edit</button>
                             </div>
                             <div class="col" v-if="event.UserID === user._id && !ViewOnlyBool">
-                                <button @click="btnCLickEventCompleted(event._id,event.points)" class="btn btn-warning mb-2 w-100">Event Completed</button>
+                                <button @click="btnCLickEventCompleted(event._id,event.points)"
+                                    class="btn btn-warning mb-2 w-100">Event Completed</button>
                             </div>
                             <div class="col" v-if="event.UserID === user._id && !ViewOnlyBool">
-                                <button class="btn btn-danger w-100" @click="btnClickDeleteEvent(event._id)">Delete Event</button>
+                                <button class="btn btn-danger w-100" @click="btnClickDeleteEvent(event._id)">Delete
+                                    Event</button>
                             </div>
 
                             <div v-else class="text-center">This event is not organised by you.</div>
                         </div>
-                           <div class="container" v-else>
+                        <div class="container" v-else>
                             <div class="row mb-2">
                                 <div class="col">
-                                    <button class="btn btn-primary w-100" @click="btnClickBackFromCompleted">Back</button>
+                                    <button class="btn btn-primary w-100"
+                                        @click="btnClickBackFromCompleted">Back</button>
                                 </div>
-                                 <div class="col">
-                                    <button class="btn btn-danger w-100" @click="btnClickDeleteEvent(event._id)">Delete Event</button>
-                                 </div>
+                                <div class="col">
+                                    <button class="btn btn-danger w-100" @click="btnClickDeleteEvent(event._id)">Delete
+                                        Event</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -107,7 +115,7 @@
 
                                     </tr>
                                 </thead>
-                                <tbody >
+                                <tbody>
                                     <tr v-for="(participant, index) in participants" :key="participant._id">
                                         <th scope="row">{{ index + 1 }}</th>
                                         <td>{{ participant.UserID.username}}</td>
@@ -137,6 +145,10 @@ import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { useToast } from 'vue-toastification'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+
+
 const toast = useToast();
 
 // Optional: only if you're using toast notifications
@@ -152,7 +164,10 @@ const user = ref({})
 const participants = ref([])
 const JoinBool = ref(false);
 const ViewOnlyBool = ref(false);
-
+const latitude = ref();
+const longitude = ref();
+const x = ref();
+const y = ref();
 
 
 const getEvent = async () => {
@@ -292,10 +307,53 @@ const btnCLickEventCompleted = async(eid, points) => {
 };
 
 
+const sortMapOut =  async()=>{
+    const map = L.map('map').setView([latitude.value, longitude.value], 17)
+
+  L.tileLayer(`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`, {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map)
+
+  L.marker([latitude.value, longitude.value]).addTo(map)
+    .bindPopup('Your location here')
+    .openPopup()
+}
+
+
+const getLongLat = async(id)=>{
+    try{
+        const response = await axios(`http://localhost:3000/api/getLongLat/${id}`)
+        const data = response.data;
+
+        if (data.found > 0 && data.results.length > 0) {
+            const { LATITUDE, LONGITUDE ,X ,Y } = data.results[0];
+            console.log("Latitude:", LATITUDE);
+            console.log("Longitude:", LONGITUDE);
+            longitude.value = LONGITUDE;
+            latitude.value = LATITUDE;
+            x.value = X;
+            y.value = Y;
+
+
+            // Optional: Return them as a tuple or object
+            return { lat: parseFloat(LATITUDE), lng: parseFloat(LONGITUDE) };
+        } else {
+            console.warn("No results found for the given ID.");
+        }
+
+    } catch (err) {
+        console.error("Error fetching coordinates:", err.message);
+    }
+
+}   
+
 onMounted(async () => {
     await getEvent();
      await getAllParticipants();
     await getProfile();
     await checkJoined();
+    console.log(user.value.postalCode)
+    await getLongLat(user.value.postalCode)
+    await sortMapOut();
 })
 </script>

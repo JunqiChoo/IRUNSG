@@ -5,7 +5,7 @@ require('dotenv').config();
 const {createUser,updatePoints} = require("../Controllers/userController")
 const {CompareUser} = require("../Controllers/auth")
 const {getProfile} = require("../Controllers/userController")
-const {getUser} = require("../Controllers/userController")
+const {getUser,getLongLat} = require("../Controllers/userController")
 const auth = require("../middleware/authMiddleware");
 const {getAllEventsOngoing,getAllEventsCompleted,deleteEvent} = require("../Controllers/eventController")
 
@@ -28,6 +28,7 @@ router.route("/login").post(CompareUser)
 router.route("/getProfile").get(auth,getProfile)
 router.route("/getUser/:id").get(getUser)
 router.route("/updatePoints/:id/:points").put(updatePoints)
+router.route("/getLongLat/:postal").get(getLongLat)
 
 //for Events
 router.route("/getAllEventsOngoing").get(getAllEventsOngoing);
